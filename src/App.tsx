@@ -1,10 +1,12 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { initializeApp } from "firebase/app";
+import Header from "./components/Header";
+import { Box, Container } from "@mui/material";
+import Home from "./components/Home";
+import { Stack } from "@mui/material";
 
 function App() {
-  // TODO: Replace the following with your app's Firebase project configuration
   const firebaseConfig = {
     apiKey: "AIzaSyBD-EbTfLwe2rYeNIo3K1iHb4dxISMGjhw",
     authDomain: "test--routes.firebaseapp.com",
@@ -17,7 +19,12 @@ function App() {
   };
 
   const app = initializeApp(firebaseConfig);
-  return <></>;
+  return (
+    <Stack sx={{ height: "100vh", p: 2, boxSizing: "border-box" }}>
+      <Header />
+      <Home />
+    </Stack>
+  );
 }
 
 export default App;
