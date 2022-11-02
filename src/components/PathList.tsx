@@ -15,19 +15,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 
-const REACT_APP_GOOGLE_MAPS_API_KEY = "AIzaSyAW3fMnr6aUKyvB-3AzQjHJZqSy9l4XX9Q";
-
-function generate(element: React.ReactElement) {
-  return Array(3)
-    .fill(5)
-    .map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      })
-    );
-}
-
-function PathList() {
+function PathList(props: any) {
   return (
     <Box sx={{ flex: 1, overflow: "auto", pt: 1 }}>
       <FormControl sx={{ width: "100%" }} variant="outlined">
@@ -44,8 +32,9 @@ function PathList() {
         />
       </FormControl>
       <List>
-        {generate(
+        {props.paths.map((path: any) => (
           <ListItem
+            key={path.id}
             secondaryAction={
               <IconButton edge="end" aria-label="delete">
                 <ArrowForwardIosIcon />
@@ -55,9 +44,12 @@ function PathList() {
             <ListItemAvatar>
               <ZoomOutMapIcon />
             </ListItemAvatar>
-            <ListItemText>jhhjhkbhbkjhjkn</ListItemText>
+            <ListItemText>
+              {path.title}, {path.pathLength} km,
+              {path.shortDescription}
+            </ListItemText>
           </ListItem>
-        )}
+        ))}
       </List>
     </Box>
   );

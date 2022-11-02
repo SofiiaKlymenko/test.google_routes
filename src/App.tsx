@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import Header from "./components/Header";
 import { Box, Container } from "@mui/material";
 import Home from "./components/Home";
 import { Stack } from "@mui/material";
 
 function App() {
+  const [paths, setPaths] = useState<any>([]);
   const firebaseConfig = {
     apiKey: "AIzaSyBD-EbTfLwe2rYeNIo3K1iHb4dxISMGjhw",
     authDomain: "test--routes.firebaseapp.com",
@@ -19,10 +22,19 @@ function App() {
   };
 
   const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  useEffect(() => {
+    const q = query(collection(db, "paths"));
+    onSnapshot(q, (querySnapshot) => {
+      setPaths(querySnapshot.docs.map((q) => ({ ...q.data(), id: q.id })));
+    });
+  }, []);
+
   return (
-    <Stack sx={{ height: "100vh", p: 2, boxSizing: "border-box" }}>
+    <Stack sx={{ height: "100vh", p: "24px 36px", boxSizing: "border-box" }}>
       <Header />
-      <Home />
+      <Home paths={paths} />
     </Stack>
   );
 }

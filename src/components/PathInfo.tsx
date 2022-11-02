@@ -1,24 +1,55 @@
-import { Box, Container } from "@mui/material";
-import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
-function PathInfo() {
+function PathInfo(props: any) {
   return (
     <Box
       sx={{
         flex: 1,
         overflow: "auto",
         pt: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
       }}
     >
-      <ZoomOutMapIcon color="disabled" sx={{ fontSize: "150px" }} />
-      <Typography variant="h6" sx={{ color: "#ccc" }}>
-        Select any path
-      </Typography>
+      {props.paths.map((path: any) => (
+        <Box>
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h5" sx={{ color: "#555" }}>
+              {path.title}
+            </Typography>
+            <Typography variant="h6" sx={{ color: "#555" }}>
+              {path.pathLength} km
+            </Typography>
+          </Stack>
+          <Typography>{path.fullDescription}</Typography>
+          <Stack justifyContent="center" alignItems="end">
+            <Button
+              variant="text"
+              sx={{
+                textDecoration: "underline",
+                textTransform: "initial",
+                color: "#1565c0",
+              }}
+            >
+              Add to favorite
+            </Button>
+            <Button
+              variant="text"
+              sx={{
+                textDecoration: "underline",
+                textTransform: "initial",
+                color: "red",
+              }}
+            >
+              Remove
+            </Button>
+          </Stack>
+        </Box>
+      ))}
     </Box>
   );
 }
