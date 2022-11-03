@@ -6,10 +6,11 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  IconButton,
   Stack,
 } from "@mui/material";
 import React from "react";
-import CancelIcon from "@mui/icons-material/Cancel";
+import CloseIcon from "@mui/icons-material/Close";
 import PathCreationTextFields from "./PathCreationTextFileds";
 import PathCreationMap from "./PathCreationMap";
 
@@ -22,10 +23,10 @@ function PathCreationFormDialog(props: any) {
     <Dialog
       open={props.open}
       onClose={handleClose}
-      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 435 } }}
+      sx={{ "& .MuiDialog-paper": { width: "100%", height: "100%" } }}
       maxWidth="lg"
     >
-      <Stack direction="row">
+      <Stack sx={{ height: "100%" }}>
         <Stack
           direction="row"
           sx={{
@@ -36,13 +37,17 @@ function PathCreationFormDialog(props: any) {
           <DialogTitle fontSize="medium" sx={{ color: "#555" }}>
             Add new path
           </DialogTitle>
-          <Button>
-            <CancelIcon />
-          </Button>
+          <IconButton onClick={handleClose} sx={{ p: 2 }}>
+            <CloseIcon />
+          </IconButton>
         </Stack>
         <Divider sx={{ borderColor: "#999", mb: 2 }} />
-        <Stack spacing={1} sx={{ p: 2 }}>
-          <PathCreationTextFields />
+        <Stack
+          spacing={1}
+          direction="row"
+          sx={{ p: 2, height: "100%", overflow: "auto" }}
+        >
+          <PathCreationTextFields paths={props.paths} />
           <Divider orientation="vertical" sx={{ borderColor: "#999" }} />
           <PathCreationMap />
         </Stack>

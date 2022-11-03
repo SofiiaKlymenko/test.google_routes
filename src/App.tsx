@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  getFirestore,
+  Query,
+  QuerySnapshot,
+} from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import Header from "./components/Header";
-import { Box, Container } from "@mui/material";
 import Home from "./components/Home";
 import { Stack } from "@mui/material";
+import { pathSlice } from "./store/reducers/PathsSlice";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import { IPath } from "./models/IPath";
 
 function App() {
-  const [paths, setPaths] = useState<any>([]);
+  const { paths } = useAppSelector((state) => state.pathReducer);
+  const { setPaths } = pathSlice.actions;
+  const dispatch = useAppDispatch();
+
+  console.log(paths);
+
+  //const [paths, setPaths] = useState<any>([]);
   const firebaseConfig = {
     apiKey: "AIzaSyBD-EbTfLwe2rYeNIo3K1iHb4dxISMGjhw",
     authDomain: "test--routes.firebaseapp.com",
@@ -25,10 +39,34 @@ function App() {
   const db = getFirestore(app);
 
   useEffect(() => {
-    const q = query(collection(db, "paths"));
-    onSnapshot(q, (querySnapshot) => {
-      setPaths(querySnapshot.docs.map((q) => ({ ...q.data(), id: q.id })));
+    const q: Query<DocumentData> = query(collection(db, "paths"));
+    onSnapshot(q, (querySnapshot: QuerySnapshot<DocumentData>) => {
+      const allPaths = querySnapshot.docs.map(
+        (q) =>
+          ({
+            ...q.data(),
+            id: q.id,
+          } as IPath)
+      );
+      // dispatch(addOnePath(allPaths[0]));
+      dispatch(setPaths(allPaths));
+      // setPaths(allPaths);
+      console.log(allPaths);
     });
+
+    // dispatch(
+    //   setPaths([
+    //     {
+    //       title: "Pizza",
+    //       shortDescription: "dsakdksak askddos ao kaosdk odkaos kod ksao",
+    //       isFavorite: true,
+    //       fullDescription:
+    //         "dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao dsakdksak askddos ao kaosdk odkaos kod ksao ",
+    //       pathLength: 3.2,
+    //       id: "buba",
+    //     },
+    //   ])
+    // );
   }, []);
 
   return (

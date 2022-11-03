@@ -1,4 +1,9 @@
+import React from "react";
 import { Box, Button, Stack } from "@mui/material";
+// import { Wrapper, Status } from '@googlemaps/react-wrapper';
+import GoogleMap from './GoogleMap';
+
+const MAPS_APIKEY = 'AIzaSyCUiJBtAGHbO083UcTBIhW5cIPjxVDxoLY';
 
 function PathCreationMap() {
   return (
@@ -9,9 +14,7 @@ function PathCreationMap() {
         pt: 1,
       }}
     >
-      <Button sx={{ textTransform: "initial" }} variant="outlined">
-        Add marker
-      </Button>
+        <GoogleMap/>
     </Box>
   );
 }
