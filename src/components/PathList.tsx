@@ -14,19 +14,48 @@ import {
 } from "@mui/material";
 import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import StarIcon from "@mui/icons-material/Star";
+import { useAppDispatch } from "../hooks/redux";
+import { pathSlice } from "../store/reducers/PathsSlice";
+import { IPath } from "../models/IPath";
 
 function PathList(props: any) {
+  const dispatch = useAppDispatch();
+  const { setSelectedPath } = pathSlice.actions;
+  const [searchValue, setSearchValue] = useState("");
+
+  const [pathsList, setPathsList] = useState(props.paths);
+
+  useEffect(() => {
+    if (searchValue) {
+      const filteredPaths = props.paths.filter(
+        (path: IPath) =>
+          path.title.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0 ||
+          path.fullDescription
+            .toLowerCase()
+            .indexOf(searchValue.toLowerCase()) >= 0
+      );
+      setPathsList(filteredPaths);
+    } else {
+      setPathsList(props.paths);
+    }
+  }, [props.paths, searchValue]);
+
+  const searchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
   return (
-    <Box sx={{ flex: 1, overflow: "auto", pt: 1 }}>
+    <Box sx={{ flex: 1, overflow: "auto", pt: 1, minWidth: "384px" }}>
       <FormControl sx={{ width: "100%" }} variant="outlined">
         <InputLabel htmlFor="search-path">Search...</InputLabel>
         <OutlinedInput
           id="search-path"
           type="text"
           label="Search..."
+          onChange={searchChange}
           endAdornment={
             <InputAdornment position="end">
               <SearchIcon />
@@ -35,12 +64,14 @@ function PathList(props: any) {
         />
       </FormControl>
       <List>
-        {props.paths?.map((path: any) => (
+        {pathsList.map((path: any) => (
           <ListItem
             key={path.id}
             onClick={() =>
-              props.setSelectedPath(
-                props.selectedPath?.id === path.id ? null : path
+              dispatch(
+                setSelectedPath(
+                  props.selectedPath?.id === path.id ? null : path.id
+                )
               )
             }
             sx={{
@@ -53,6 +84,7 @@ function PathList(props: any) {
             secondaryAction={
               <IconButton edge="end">
                 <ArrowForwardIosIcon
+                  fontSize="small"
                   sx={{
                     color:
                       path.id === props.selectedPath?.id ? "#fff" : "inherit",

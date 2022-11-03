@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import path from "path";
-import { array } from "yargs";
 import { IPath } from "../../models/IPath";
 
 export interface PathsState {

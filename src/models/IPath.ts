@@ -5,4 +5,5 @@ export interface IPath {
   shortDescription: string;
   pathLength: number;
   isFavorite: boolean;
+  directions: string;
 }
